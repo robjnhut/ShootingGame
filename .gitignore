@@ -361,3 +361,14 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Ignore Unity temporary files and directories
+[Ll]ibrary/
+[Tt]emp/
+[Uu]sersettings/
+[Bb]in/
+[Oo]bj/
+.vs/
+
+buildProject/
+buildProject/shotiinggamenew_Data/
