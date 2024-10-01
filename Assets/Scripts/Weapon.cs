@@ -5,16 +5,58 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    public Camera playerCamera;
+
+    //shooting
+    public bool isShooting, readyToshoot;
+    bool allowReset = true;
+    public float shootingDelay = 2f;
+
+    //Burst
+    public int bulletsPerBurst = 3;
+    public int burstBulletLeft;
+
+    // spread
+    public float spreadIntensity;
+
+
     public GameObject bulletPrefabs;
     public Transform bulletSpawn;
     public float bulletVelocity = 30;
     public float bulletPrefabsLifeTime = 3f;
     // Update is called once per frame
+
+    public enum ShootingMode
+    {
+        Single,
+        Burst,
+        Auto
+    }
+
+    public ShootingMode currentShootingMode;
+
+    private void Awake()
+    {
+        readyToshoot = true;
+        burstBulletLeft = bulletsPerBurst;
+
+    }
+
     void Update()
     {
-        //left mouse click
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+       if(currentShootingMode == ShootingMode.Auto)
         {
+            //Holding Down left Mouse button
+            isShooting = Input.GetKey(KeyCode.Mouse0);
+        }
+       else if(currentShootingMode == ShootingMode.Single || currentShootingMode == ShootingMode.Burst)
+        {
+            // clicik chuột trái 1 lần
+            isShooting = Input.GetKeyDown(KeyCode.Mouse0);
+        }
+       if(readyToshoot && isShooting)
+        {
+            burstBulletLeft = bulletsPerBurst;
             FireWeapon();
         }
         
@@ -22,18 +64,70 @@ public class Weapon : MonoBehaviour
 
     private void FireWeapon()
     {
-        // Kiểm tra vị trí bulletSpawn
-        Debug.Log("Bullet Spawn Position: " + bulletSpawn.position);
-        Debug.Log(bulletSpawn.forward);
+        readyToshoot = false;
+        Vector3 shootingDirection = CalculateDirectionAndSpread().normalized;
 
 
         // instantiate the bullet
         GameObject bullet =  Instantiate(bulletPrefabs, bulletSpawn.position, Quaternion.identity);
-        //shoot the bullet
         
+        // point the bullet to face shooting direction
+        bullet.transform.forward = shootingDirection;
+
+        //shoot the bullet
         bullet.GetComponent<Rigidbody>().AddForce(bulletSpawn.forward.normalized *  bulletVelocity, ForceMode.Impulse);
+        
         //destroy the bullet after a few seconds
         StartCoroutine(DestroyBulletAfterTime(bullet,bulletPrefabsLifeTime));
+
+
+        //checking if we are done shooting
+        if(allowReset)
+        {
+            Invoke("ResetShot", shootingDelay);
+            allowReset = false;
+        }
+
+        //burst mode
+        if (currentShootingMode == ShootingMode.Burst && burstBulletLeft > 1)
+        {
+            burstBulletLeft--;
+            Invoke("FireWeapon", shootingDelay);
+        }
+    }
+    
+    private void ResetShot()
+    {
+        readyToshoot = true;
+        allowReset = true;
+    }
+
+    public Vector3 CalculateDirectionAndSpread()
+    { 
+        //shooting from the middle of the screen to check where we point at
+        Ray ray = playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        RaycastHit hit;
+
+        Vector3 targetPoint;
+        if(Physics.Raycast(ray, out hit))
+        {
+            // hit something
+            targetPoint = hit.point;
+        }
+        else
+        {
+            //shooting at the air
+            targetPoint = ray.GetPoint(100);
+        }
+        
+
+        Vector3 direction = targetPoint - bulletSpawn.position;
+
+        float x = UnityEngine.Random.Range(-spreadIntensity, spreadIntensity);
+        float y = UnityEngine.Random.Range(-spreadIntensity, spreadIntensity);
+
+        //returning the shooting direction and spread
+        return direction + new Vector3(x, y, 0);
 
 
     }
