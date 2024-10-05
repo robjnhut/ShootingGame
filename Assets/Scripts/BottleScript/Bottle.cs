@@ -14,7 +14,7 @@ public class Bottle : MonoBehaviour
         }
     }
     
-    void Explode()
+        public void Explode()
     {
         GameObject brokenBottle = Instantiate(brokenBottlePrefab, this.transform.position, Quaternion.identity);
         brokenBottle.GetComponent<BrokenBottle>().RandomVelocities();

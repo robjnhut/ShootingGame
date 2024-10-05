@@ -372,3 +372,4 @@ FodyWeavers.xsd
 
 buildProject/
 buildProject/shotiinggamenew_Data/
+*.csproj

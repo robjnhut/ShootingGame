@@ -4,26 +4,34 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision objectWeHit)
     {
-        if (collision.gameObject.CompareTag("Target"))
+        if (objectWeHit.gameObject.CompareTag("Target"))
         {
-            print("hit " + collision.gameObject.name + " !");
+            print("hit " + objectWeHit.gameObject.name + " !");
 
-            CreateBulletImpactEffect(collision);
+            CreateBulletImpactEffect(objectWeHit);
 
             Destroy(gameObject);
 
         }
 
-        if (collision.gameObject.CompareTag("Wall"))
+        if (objectWeHit.gameObject.CompareTag("Wall"))
         {
             print("hit a wall");
 
-            CreateBulletImpactEffect(collision);
+            CreateBulletImpactEffect(objectWeHit);
 
             Destroy(gameObject);
 
+        }
+
+        if (objectWeHit.gameObject.CompareTag("Bottle"))
+        {
+            print("hit a bottle");
+
+            objectWeHit.gameObject.GetComponent<Bottle>().Explode();
+            // Không cần phải destroy viên đạn ở đây nếu bạn muốn viên đạn không bị tiêu diệt ngay lập tức.
         }
     }
     
