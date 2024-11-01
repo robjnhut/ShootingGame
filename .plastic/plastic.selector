@@ -1,0 +1,4 @@
+repository "shotiinggamenew@robjnhut@cloud"
+  path "/"
+    br "/main"
+    co "/main"

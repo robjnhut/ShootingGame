@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
@@ -27,8 +28,15 @@ public class Weapon : MonoBehaviour
     // Update is called once per frame
 
     public GameObject muzzleEffect;
-
     private Animator animator;
+
+    //loading
+    public float reloadTime;
+    public int magazineSize, bulletsLeft;
+    public bool isReloading;
+
+    //UI
+    public TextMeshProUGUI ammoDisplay;
     public enum ShootingMode
     {
         Single,
@@ -44,10 +52,23 @@ public class Weapon : MonoBehaviour
         burstBulletLeft = bulletsPerBurst;
         animator = GetComponent<Animator>(); 
 
+        bulletsLeft = magazineSize;
+
     }
 
     void Update()
     {
+        // Phát âm thanh hết đạn nếu đạn đã hết và người chơi nhấn chuột để bắn
+        if (bulletsLeft == 0 && isShooting && !SoundManager.Instance.emptyMagazineSoundPistol.isPlaying)
+        {
+            SoundManager.Instance.emptyMagazineSoundPistol.Play();
+        }
+
+        //if (bulletsLeft == 0 && isShooting)
+        //{
+        //    SoundManager.Instance.emptyMagazineSoundPistol.Play();
+        //}
+
        if(currentShootingMode == ShootingMode.Auto)
         {
             //Holding Down left Mouse button
@@ -58,18 +79,45 @@ public class Weapon : MonoBehaviour
             // clicik chuột trái 1 lần
             isShooting = Input.GetKeyDown(KeyCode.Mouse0);
         }
+
+       if(Input.GetKeyUp(KeyCode.R) && bulletsLeft < magazineSize && isReloading == false)
+        {
+            Reload();
+        }
+
+        // if you want to automatically reload when magazine is empty
+        if (readyToshoot && isShooting == false && isReloading == false && bulletsLeft <= 0)
+        {
+           // Reload();
+        }
+
        if(readyToshoot && isShooting)
         {
             burstBulletLeft = bulletsPerBurst;
             FireWeapon();
+        }
+
+       if(AmmoManager.Instance.ammoDisplay != null)
+        {
+            AmmoManager.Instance.ammoDisplay.text = $"{bulletsLeft/bulletsPerBurst}/{magazineSize/bulletsPerBurst}";
         }
         
     }
 
     private void FireWeapon()
     {
+        if (bulletsLeft <= 0)
+        {
+            SoundManager.Instance.emptyMagazineSoundPistol.Play();
+            return; // Ngừng hàm để không bắn khi không còn đạn
+        }
+
+        bulletsLeft--;
+
         muzzleEffect.GetComponent<ParticleSystem>().Play();
         animator.SetTrigger("RECOIL");
+
+        SoundManager.Instance.shootingPistol.Play();
 
         readyToshoot = false;
         Vector3 shootingDirection = CalculateDirectionAndSpread().normalized;
@@ -101,6 +149,23 @@ public class Weapon : MonoBehaviour
             burstBulletLeft--;
             Invoke("FireWeapon", shootingDelay);
         }
+    }
+
+    private void Reload()
+    {
+        SoundManager.Instance.reloadingSoundPistol.Play();
+
+
+        isReloading = true;
+        Invoke("ReloadCompleted", reloadTime);
+
+    }
+
+    private void ReloadCompleted()
+    {
+        bulletsLeft = magazineSize;
+        isReloading = false;
+
     }
     
     private void ResetShot()

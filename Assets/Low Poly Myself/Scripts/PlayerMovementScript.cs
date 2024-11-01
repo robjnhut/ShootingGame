@@ -66,7 +66,7 @@ public class PlayerMovementScript : MonoBehaviour
 
         // Di chuyển nhân vật
         controller.Move(move * currentSpeed * Time.deltaTime);
-
+         
         // Kiểm tra nếu nhân vật nhảy
         if (Input.GetButtonDown("Jump") && isGrounded && !isCrouching) // Không thể nhảy khi ngồi
         {
