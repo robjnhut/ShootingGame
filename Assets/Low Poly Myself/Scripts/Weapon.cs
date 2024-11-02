@@ -37,6 +37,15 @@ public class Weapon : MonoBehaviour
 
     //UI
     public TextMeshProUGUI ammoDisplay;
+
+    public enum WeaponModel
+    {
+        Pistol,
+        MP40
+
+    }
+
+    public WeaponModel thisWeaponModel;
     public enum ShootingMode
     {
         Single,
@@ -117,7 +126,9 @@ public class Weapon : MonoBehaviour
         muzzleEffect.GetComponent<ParticleSystem>().Play();
         animator.SetTrigger("RECOIL");
 
-        SoundManager.Instance.shootingPistol.Play();
+
+        //SoundManager.Instance.shootingPistol.Play();
+        SoundManager.Instance.playShootingSound(thisWeaponModel); 
 
         readyToshoot = false;
         Vector3 shootingDirection = CalculateDirectionAndSpread().normalized;
@@ -153,7 +164,11 @@ public class Weapon : MonoBehaviour
 
     private void Reload()
     {
-        SoundManager.Instance.reloadingSoundPistol.Play();
+        //SoundManager.Instance.reloadingSoundPistol.Play();
+        SoundManager.Instance.playReloadSound(thisWeaponModel);
+
+
+        animator.SetTrigger("RELOAD");
 
 
         isReloading = true;
@@ -210,4 +225,6 @@ public class Weapon : MonoBehaviour
         Destroy(bullet);
 
     }
+
+
 }
