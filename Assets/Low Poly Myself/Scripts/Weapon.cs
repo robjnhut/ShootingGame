@@ -6,7 +6,9 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
-   
+
+    public bool isActiveWeapon;
+
 
     //shooting
     public bool isShooting, readyToshoot;
@@ -28,12 +30,16 @@ public class Weapon : MonoBehaviour
     // Update is called once per frame
 
     public GameObject muzzleEffect;
-    private Animator animator;
+    internal Animator animator;
 
     //loading
     public float reloadTime;
     public int magazineSize, bulletsLeft;
     public bool isReloading;
+
+    public Vector3 spawnPosition;
+    public Vector3 spawnRotation;
+     
 
     //UI
     public TextMeshProUGUI ammoDisplay;
@@ -64,51 +70,54 @@ public class Weapon : MonoBehaviour
         bulletsLeft = magazineSize;
 
     }
-
+    
     void Update()
     {
-        // Phát âm thanh hết đạn nếu đạn đã hết và người chơi nhấn chuột để bắn
-        if (bulletsLeft == 0 && isShooting && !SoundManager.Instance.emptyMagazineSoundPistol.isPlaying)
+        if (isActiveWeapon)
         {
-            SoundManager.Instance.emptyMagazineSoundPistol.Play();
-        }
+            // Phát âm thanh hết đạn nếu đạn đã hết và người chơi nhấn chuột để bắn
+            if (bulletsLeft == 0 && isShooting && !SoundManager.Instance.emptyMagazineSoundPistol.isPlaying)
+            {
+                SoundManager.Instance.emptyMagazineSoundPistol.Play();
+            }
 
-        //if (bulletsLeft == 0 && isShooting)
-        //{
-        //    SoundManager.Instance.emptyMagazineSoundPistol.Play();
-        //}
+            //if (bulletsLeft == 0 && isShooting)
+            //{
+            //    SoundManager.Instance.emptyMagazineSoundPistol.Play();
+            //}
 
-       if(currentShootingMode == ShootingMode.Auto)
-        {
-            //Holding Down left Mouse button
-            isShooting = Input.GetKey(KeyCode.Mouse0);
-        }
-       else if(currentShootingMode == ShootingMode.Single || currentShootingMode == ShootingMode.Burst)
-        {
-            // clicik chuột trái 1 lần
-            isShooting = Input.GetKeyDown(KeyCode.Mouse0);
-        }
+            if (currentShootingMode == ShootingMode.Auto)
+            {
+                //Holding Down left Mouse button
+                isShooting = Input.GetKey(KeyCode.Mouse0);
+            }
+            else if (currentShootingMode == ShootingMode.Single || currentShootingMode == ShootingMode.Burst)
+            {
+                // clicik chuột trái 1 lần
+                isShooting = Input.GetKeyDown(KeyCode.Mouse0);
+            }
 
-       if(Input.GetKeyUp(KeyCode.R) && bulletsLeft < magazineSize && isReloading == false)
-        {
-            Reload();
-        }
+            if (Input.GetKeyUp(KeyCode.R) && bulletsLeft < magazineSize && isReloading == false)
+            {
+                Reload();
+            }
 
-        // if you want to automatically reload when magazine is empty
-        if (readyToshoot && isShooting == false && isReloading == false && bulletsLeft <= 0)
-        {
-           // Reload();
-        }
+            // if you want to automatically reload when magazine is empty
+            if (readyToshoot && isShooting == false && isReloading == false && bulletsLeft <= 0)
+            {
+                // Reload();
+            }
 
-       if(readyToshoot && isShooting)
-        {
-            burstBulletLeft = bulletsPerBurst;
-            FireWeapon();
-        }
+            if (readyToshoot && isShooting)
+            {
+                burstBulletLeft = bulletsPerBurst;
+                FireWeapon();
+            }
 
-       if(AmmoManager.Instance.ammoDisplay != null)
-        {
-            AmmoManager.Instance.ammoDisplay.text = $"{bulletsLeft/bulletsPerBurst}/{magazineSize/bulletsPerBurst}";
+            if (AmmoManager.Instance.ammoDisplay != null)
+            {
+                AmmoManager.Instance.ammoDisplay.text = $"{bulletsLeft / bulletsPerBurst}/{magazineSize / bulletsPerBurst}";
+            } 
         }
         
     }

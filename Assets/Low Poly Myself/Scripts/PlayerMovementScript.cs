@@ -6,9 +6,9 @@ public class PlayerMovementScript : MonoBehaviour
 {
     private CharacterController controller;
 
-    public float speed = 12f;
-    public float crouchSpeed = 6f; // Tốc độ khi ngồi
-    public float gravity = -9.81f * 2;
+    public float speed = 8f;
+    public float crouchSpeed = 4f; // Tốc độ khi ngồi
+    public float gravity = -9.81f ;
     public float jumpHeight = 3f; // Sửa lỗi chính tả
 
     public Transform groundCheck;
