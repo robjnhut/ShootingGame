@@ -73,8 +73,11 @@ public class Weapon : MonoBehaviour
     
     void Update()
     {
+
         if (isActiveWeapon)
         {
+            GetComponent<Outline>().enabled = false;
+
             // Phát âm thanh hết đạn nếu đạn đã hết và người chơi nhấn chuột để bắn
             if (bulletsLeft == 0 && isShooting && !SoundManager.Instance.emptyMagazineSoundPistol.isPlaying)
             {
@@ -134,6 +137,7 @@ public class Weapon : MonoBehaviour
 
         muzzleEffect.GetComponent<ParticleSystem>().Play();
         animator.SetTrigger("RECOIL");
+        
 
 
         //SoundManager.Instance.shootingPistol.Play();
