@@ -2,14 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Weapon;
 
 public class WeaponManager : MonoBehaviour
 {
-    public static WeaponManager Instance { get; set; }
+    public static WeaponManager Instance { get;private set; }
 
     public List<GameObject> weaponSlots;
     
     public GameObject activeWeaponSlot;
+
+    [Header("Ammo")]
+    public int totalRifleAmmo = 0;
+    public int totalPistolAmmo = 0;
+
 
     private void Awake()
     {
@@ -27,6 +33,7 @@ public class WeaponManager : MonoBehaviour
     private void Start()
     {
         activeWeaponSlot = weaponSlots[0];
+        
     }
 
     private void Update()
@@ -55,48 +62,50 @@ public class WeaponManager : MonoBehaviour
     }
     public void PickUpWeapon(GameObject pickedupWeapon)
     {
+        
         AddWeaponIntoActiveSlot(pickedupWeapon);
     }
-
-    //private void AddWeaponIntoActiveSlot(GameObject pickedupWeapon)
-    //{
-    //    DropCurrentWeapon(pickedupWeapon);
-
-    //    // Gán súng vào vị trí activeWeaponSlot
-    //    pickedupWeapon.transform.SetParent(activeWeaponSlot.transform, false);
-
-    //    // Lấy component Weapon để truy cập spawnPosition và spawnRotation
-    //    Weapon weapon = pickedupWeapon.GetComponent<Weapon>();
-
-    //    // Đặt position và rotation đúng mong muốn
-    //    pickedupWeapon.transform.localPosition =new Vector3(weapon.spawnPosition.x, weapon.spawnPosition.y, weapon.spawnPosition.z);
-    //    pickedupWeapon.transform.localRotation = Quaternion.Euler(weapon.spawnRotation.x, weapon.spawnRotation.y, weapon.spawnRotation.z);
-
-    //    // Đảm bảo weapon hoạt động
-    //    weapon.isActiveWeapon = true;
-    //    weapon.animator.enabled = true;
-    //}
 
     private void AddWeaponIntoActiveSlot(GameObject pickedupWeapon)
     {
         DropCurrentWeapon(pickedupWeapon);
 
-        // Đặt parent của súng là activeWeaponSlot và giữ lại local position/rotation
+        // Gán súng vào vị trí activeWeaponSlot
         pickedupWeapon.transform.SetParent(activeWeaponSlot.transform, false);
 
         // Lấy component Weapon để truy cập spawnPosition và spawnRotation
         Weapon weapon = pickedupWeapon.GetComponent<Weapon>();
 
-        // Đặt lại vị trí và xoay của súng trong local space của WeaponSlot_1
-        pickedupWeapon.transform.localPosition = weapon.spawnPosition;
-        pickedupWeapon.transform.localRotation = Quaternion.Euler(weapon.spawnRotation);
+        // Đặt position và rotation đúng mong muốn
+        pickedupWeapon.transform.localPosition = new Vector3(weapon.spawnPosition.x, weapon.spawnPosition.y, weapon.spawnPosition.z);
+        pickedupWeapon.transform.localRotation = Quaternion.Euler(weapon.spawnRotation.x, weapon.spawnRotation.y, weapon.spawnRotation.z);
 
-        // Kích hoạt súng và bật Animator (nếu cần)
+        // Đảm bảo weapon hoạt động
         weapon.isActiveWeapon = true;
         weapon.animator.enabled = true;
-
-        Debug.Log("Local Rotation của súng sau khi nhặt: " + pickedupWeapon.transform.localRotation.eulerAngles);
     }
+
+    //private void AddWeaponIntoActiveSlot(GameObject pickedupWeapon)
+    //{
+    //    Debug.Log("Adding weapon to active slot: " + activeWeaponSlot.name);
+    //    DropCurrentWeapon(pickedupWeapon);
+
+    //    // Đặt parent của súng là activeWeaponSlot và giữ lại local position/rotation
+    //    pickedupWeapon.transform.SetParent(activeWeaponSlot.transform, false);
+
+    //    // Lấy component Weapon để truy cập spawnPosition và spawnRotation
+    //    Weapon weapon = pickedupWeapon.GetComponent<Weapon>();
+
+    //    // Đặt lại vị trí và xoay của súng trong local space của WeaponSlot_1
+    //    pickedupWeapon.transform.localPosition = weapon.spawnPosition;
+    //    pickedupWeapon.transform.localRotation = Quaternion.Euler(weapon.spawnRotation);
+
+    //    // Kích hoạt súng và bật Animator (nếu cần)
+    //    weapon.isActiveWeapon = true;
+    //    weapon.animator.enabled = true;
+
+    //    Debug.Log("Local Rotation của súng sau khi nhặt: " + pickedupWeapon.transform.localRotation.eulerAngles);
+    //}
 
 
     private void DropCurrentWeapon(GameObject pickedupWeapon)
@@ -132,5 +141,48 @@ public class WeaponManager : MonoBehaviour
         }
 
 
+    }
+
+    internal void PickUpAmmo(AmmoBox ammo)
+    {
+        switch (ammo.ammoType)
+        {
+            case AmmoBox.AmmoType.PistolAmmo:
+                totalPistolAmmo += ammo.ammoAmount;
+                break;
+
+            case AmmoBox.AmmoType.RifleAmmo:
+                totalRifleAmmo += ammo.ammoAmount;
+                break; 
+        }
+    }
+
+    internal void DecreaseTotalAmmo(int bulletsToDecrease, Weapon.WeaponModel thisWeaponModel)
+    {
+        switch(thisWeaponModel)
+        {
+            case Weapon.WeaponModel.MP40:
+                totalRifleAmmo -= bulletsToDecrease;
+                break;
+            case Weapon.WeaponModel.Pistol:
+                totalPistolAmmo -= bulletsToDecrease;
+                break;
+
+        }
+    }
+
+    public int CheckAmmoLeftFor(WeaponModel thisWeaponModel)
+    {
+        switch (thisWeaponModel)
+        {
+            case WeaponModel.MP40:
+                return totalRifleAmmo;
+
+            case WeaponModel.Pistol:
+                return totalPistolAmmo;
+
+            default:
+                return 0;
+        }
     }
 }
