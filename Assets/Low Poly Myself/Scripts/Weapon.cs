@@ -39,7 +39,7 @@ public class Weapon : MonoBehaviour
 
     public Vector3 spawnPosition;
     public Vector3 spawnRotation;
-     
+
 
     //UI
     public TextMeshProUGUI ammoDisplay;
@@ -65,12 +65,12 @@ public class Weapon : MonoBehaviour
     {
         readyToshoot = true;
         burstBulletLeft = bulletsPerBurst;
-        animator = GetComponent<Animator>(); 
+        animator = GetComponent<Animator>();
 
         bulletsLeft = magazineSize;
 
     }
-    
+
     void Update()
     {
 
@@ -100,7 +100,7 @@ public class Weapon : MonoBehaviour
                 isShooting = Input.GetKeyDown(KeyCode.Mouse0);
             }
 
-            if (Input.GetKeyUp(KeyCode.R) && bulletsLeft < magazineSize && isReloading == false && WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponModel) > 0 )
+            if (Input.GetKeyUp(KeyCode.R) && bulletsLeft < magazineSize && isReloading == false && WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponModel) > 0)
             {
                 Reload();
             }
@@ -118,10 +118,10 @@ public class Weapon : MonoBehaviour
             }
 
         }
-        
+
     }
 
-   
+
 
     private void FireWeapon()
     {
@@ -135,31 +135,32 @@ public class Weapon : MonoBehaviour
 
         muzzleEffect.GetComponent<ParticleSystem>().Play();
         animator.SetTrigger("RECOIL");
-        
+        HUDManager.Instance.UpdateHUD();
+
 
 
         //SoundManager.Instance.shootingPistol.Play();
-        SoundManager.Instance.playShootingSound(thisWeaponModel); 
+        SoundManager.Instance.playShootingSound(thisWeaponModel);
 
         readyToshoot = false;
         Vector3 shootingDirection = CalculateDirectionAndSpread().normalized;
 
 
         // instantiate the bullet
-        GameObject bullet =  Instantiate(bulletPrefabs, bulletSpawn.position, Quaternion.identity);
-        
+        GameObject bullet = Instantiate(bulletPrefabs, bulletSpawn.position, Quaternion.identity);
+
         // point the bullet to face shooting direction
         bullet.transform.forward = shootingDirection;
 
         //shoot the bullet
-        bullet.GetComponent<Rigidbody>().AddForce(bulletSpawn.forward.normalized *  bulletVelocity, ForceMode.Impulse);
-        
+        bullet.GetComponent<Rigidbody>().AddForce(bulletSpawn.forward.normalized * bulletVelocity, ForceMode.Impulse);
+
         //destroy the bullet after a few seconds
-        StartCoroutine(DestroyBulletAfterTime(bullet,bulletPrefabsLifeTime));
+        StartCoroutine(DestroyBulletAfterTime(bullet, bulletPrefabsLifeTime));
 
 
         //checking if we are done shooting
-        if(allowReset)
+        if (allowReset)
         {
             Invoke("ResetShot", shootingDelay);
             allowReset = false;
@@ -189,7 +190,7 @@ public class Weapon : MonoBehaviour
 
     private void ReloadCompleted()
     {
-        if(WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponModel) > magazineSize)
+        if (WeaponManager.Instance.CheckAmmoLeftFor(thisWeaponModel) > magazineSize)
         {
             bulletsLeft = magazineSize;
             WeaponManager.Instance.DecreaseTotalAmmo(bulletsLeft, thisWeaponModel);
@@ -201,9 +202,10 @@ public class Weapon : MonoBehaviour
         }
 
         isReloading = false;
+        HUDManager.Instance.UpdateHUD();
 
     }
-    
+
     private void ResetShot()
     {
         readyToshoot = true;
@@ -211,23 +213,23 @@ public class Weapon : MonoBehaviour
     }
 
     public Vector3 CalculateDirectionAndSpread()
-    { 
+    {
         //shooting from the middle of the screen to check where we point at
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
         Vector3 targetPoint;
-        if(Physics.Raycast(ray, out hit))
+        if (Physics.Raycast(ray, out hit))
         {
             // hit something
             targetPoint = hit.point;
         }
-        else 
+        else
         {
             //shooting at the air
             targetPoint = ray.GetPoint(100);
         }
-        
+
 
         Vector3 direction = targetPoint - bulletSpawn.position;
 
@@ -249,3 +251,5 @@ public class Weapon : MonoBehaviour
 
 
 }
+
+

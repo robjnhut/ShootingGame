@@ -6,15 +6,23 @@ using static Weapon;
 
 public class WeaponManager : MonoBehaviour
 {
-    public static WeaponManager Instance { get;private set; }
+    public static WeaponManager Instance { get; private set; }
 
     public List<GameObject> weaponSlots;
-    
+
     public GameObject activeWeaponSlot;
 
     [Header("Ammo")]
     public int totalRifleAmmo = 0;
     public int totalPistolAmmo = 0;
+
+    [Header("Throwables")]
+    public int grenades = 0;
+    public float throwForce = 10f;
+    public GameObject grenadePrefab;
+    public GameObject throwablSpawn;
+    public float forceMultiplier = 0;
+    public float forceMultiplierLimit = 2f;
 
 
     private void Awake()
@@ -33,14 +41,14 @@ public class WeaponManager : MonoBehaviour
     private void Start()
     {
         activeWeaponSlot = weaponSlots[0];
-        
+
     }
 
     private void Update()
     {
         foreach (GameObject weaponSlot in weaponSlots)
         {
-            if(weaponSlot == activeWeaponSlot)
+            if (weaponSlot == activeWeaponSlot)
             {
                 weaponSlot.SetActive(true);
             }
@@ -59,11 +67,37 @@ public class WeaponManager : MonoBehaviour
             SwitchActiveSlot(1);
         }
 
+        if (Input.GetKey(KeyCode.G))
+        {
+            forceMultiplier += Time.deltaTime;
+
+            if(forceMultiplier > forceMultiplierLimit)
+            {
+                forceMultiplier = forceMultiplierLimit;
+            }
+        }
+
+        if (Input.GetKeyUp(KeyCode.G))
+        {
+            if(grenades > 0)
+            {
+                ThrowLethal();
+            }
+
+            forceMultiplier = 0;
+
+        }
+
+        
     }
+
+    
+
     public void PickUpWeapon(GameObject pickedupWeapon)
     {
-        
+
         AddWeaponIntoActiveSlot(pickedupWeapon);
+        HUDManager.Instance.UpdateHUD(); // Cập nhật HUD sau khi nhặt vũ khí
     }
 
     private void AddWeaponIntoActiveSlot(GameObject pickedupWeapon)
@@ -110,12 +144,12 @@ public class WeaponManager : MonoBehaviour
 
     private void DropCurrentWeapon(GameObject pickedupWeapon)
     {
-        if(activeWeaponSlot.transform.childCount > 0)
+        if (activeWeaponSlot.transform.childCount > 0)
         {
             var weaponToDrop = activeWeaponSlot.transform.GetChild(0).gameObject;
 
             weaponToDrop.GetComponent<Weapon>().isActiveWeapon = false;
-            weaponToDrop.GetComponent<Weapon>().animator.enabled = false; 
+            weaponToDrop.GetComponent<Weapon>().animator.enabled = false;
 
             weaponToDrop.transform.SetParent(pickedupWeapon.transform.parent);
             weaponToDrop.transform.localPosition = pickedupWeapon.transform.localPosition;
@@ -153,13 +187,14 @@ public class WeaponManager : MonoBehaviour
 
             case AmmoBox.AmmoType.RifleAmmo:
                 totalRifleAmmo += ammo.ammoAmount;
-                break; 
+                break;
         }
+        HUDManager.Instance.UpdateHUD(); // Cập nhật HUD sau khi nhặt đạn
     }
 
     internal void DecreaseTotalAmmo(int bulletsToDecrease, Weapon.WeaponModel thisWeaponModel)
     {
-        switch(thisWeaponModel)
+        switch (thisWeaponModel)
         {
             case Weapon.WeaponModel.MP40:
                 totalRifleAmmo -= bulletsToDecrease;
@@ -185,4 +220,56 @@ public class WeaponManager : MonoBehaviour
                 return 0;
         }
     }
+
+    internal void PickUpThrowable(Throwable throwable)
+    {
+        switch (throwable.throwableType)
+        {
+            case Throwable.ThrowableType.Grenade:
+                PickUpGrenade();
+                break;
+
+        }
+    }
+
+    private void PickUpGrenade()
+    {
+        grenades += 1;
+
+        HUDManager.Instance.UpdateThrowables(Throwable.ThrowableType.Grenade);  
+    }
+
+    private void ThrowLethal()
+    {
+        //GameObject lethalPrefab =  grenadePrefab;
+
+        //GameObject throwable = Instantiate(lethalPrefab, throwablSpawn.transform.position, Camera.main.transform.rotation);
+        //Rigidbody rb = throwable.GetComponent<Rigidbody>();
+
+        //rb.AddForce(Camera.main.transform.forward * (throwForce * forceMultiplier), ForceMode.Impulse);
+
+        //grenades -= 1;
+
+        //HUDManager.Instance.UpdateThrowables(Throwable.ThrowableType.Grenade);
+
+        // Tạo lựu đạn từ prefab và đặt vị trí ném
+        GameObject throwable = Instantiate(grenadePrefab, throwablSpawn.transform.position, Camera.main.transform.rotation);
+        Throwable throwableComponent = throwable.GetComponent<Throwable>();
+
+        // Đặt hasBeenThrown = true để bắt đầu đếm ngược cho phát nổ
+        if (throwableComponent != null)
+        {
+            throwableComponent.hasBeenThrown = true;
+        }
+
+        // Thêm lực ném
+        Rigidbody rb = throwable.GetComponent<Rigidbody>();
+        rb.AddForce(Camera.main.transform.forward * (throwForce * forceMultiplier), ForceMode.Impulse);
+
+        // Giảm số lượng lựu đạn và cập nhật HUD
+        grenades -= 1;
+        HUDManager.Instance.UpdateThrowables(Throwable.ThrowableType.Grenade);
+
+    }
 }
+

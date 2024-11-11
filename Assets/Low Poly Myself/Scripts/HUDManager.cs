@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class HUDManager : MonoBehaviour
 {
-    public static HUDManager Instance { get;   set; }
+    public static HUDManager Instance { get; set; }
 
     [Header("Ammo")]
     public TextMeshProUGUI magazineAmmoUI;
@@ -25,7 +25,8 @@ public class HUDManager : MonoBehaviour
     public Image tacticalUI;
     public TextMeshProUGUI tacticalAmountUI;
 
-    public Sprite emptySlot;  
+    public Sprite emptySlot;
+    public Sprite greySlot;
 
 
     private void Awake()
@@ -51,7 +52,7 @@ public class HUDManager : MonoBehaviour
         if (activeWeapon)
         {
             magazineAmmoUI.text = $"{activeWeapon.bulletsLeft / activeWeapon.bulletsPerBurst}";
-            totalAmmoUI.text =  $"{WeaponManager.Instance.CheckAmmoLeftFor(activeWeapon.thisWeaponModel)}";
+            totalAmmoUI.text = $"{WeaponManager.Instance.CheckAmmoLeftFor(activeWeapon.thisWeaponModel)}";
 
             Weapon.WeaponModel model = activeWeapon.thisWeaponModel;
             ammoTypeUI.sprite = GetAmmoSprite(model);
@@ -62,7 +63,7 @@ public class HUDManager : MonoBehaviour
             {
                 unActiveWeaponUI.sprite = GetWeaponSprite(unActiveWeapon.thisWeaponModel);
 
-            
+
             }
         }
         else
@@ -71,10 +72,49 @@ public class HUDManager : MonoBehaviour
             totalAmmoUI.text = "";
 
             activeWeaponUI.sprite = emptySlot;
-            unActiveWeaponUI.sprite= emptySlot; 
+            unActiveWeaponUI.sprite = emptySlot;
+        }
+
+        if(WeaponManager.Instance.grenades <= 0)
+        {
+            lethalUI.sprite = greySlot;
+
         }
 
     }
+
+    public void UpdateHUD()
+    {
+        // Get the active weapon from WeaponManager
+        Weapon activeWeapon = WeaponManager.Instance.activeWeaponSlot?.GetComponent<Weapon>();
+
+        if (activeWeapon != null)
+        {
+            // Display remaining bullets in magazine
+            magazineAmmoUI.text = $"{activeWeapon.bulletsLeft}";
+
+            // Display total remaining ammo for this weapon type
+            totalAmmoUI.text = $"{WeaponManager.Instance.CheckAmmoLeftFor(activeWeapon.thisWeaponModel)}";
+
+            // Set ammo icon and weapon icon
+            ammoTypeUI.sprite = GetAmmoSprite(activeWeapon.thisWeaponModel);
+            activeWeaponUI.sprite = GetWeaponSprite(activeWeapon.thisWeaponModel);
+
+            Debug.Log("Updated HUD for active weapon: " + activeWeapon.thisWeaponModel);
+        }
+        else
+        {
+            // Clear UI elements when no active weapon is selected
+            magazineAmmoUI.text = "0";
+            totalAmmoUI.text = "0";
+            ammoTypeUI.sprite = emptySlot;
+            activeWeaponUI.sprite = emptySlot;
+
+            Debug.LogWarning("No active weapon found, HUD cleared.");
+        }
+    }
+
+
 
 
 
@@ -83,10 +123,10 @@ public class HUDManager : MonoBehaviour
         switch (model)
         {
             case Weapon.WeaponModel.Pistol:
-                return Instantiate(Resources.Load<GameObject>("Pistol_Weapon")).GetComponent<SpriteRenderer>().sprite;
+                return Resources.Load<GameObject>("Pistol_Weapon").GetComponent<SpriteRenderer>().sprite;
 
             case Weapon.WeaponModel.MP40:
-                return Instantiate(Resources.Load<GameObject>("MP40_Weapon")).GetComponent<SpriteRenderer>().sprite;
+                return Resources.Load<GameObject>("MP40_Weapon").GetComponent<SpriteRenderer>().sprite;
 
             default:
                 return null;
@@ -98,10 +138,10 @@ public class HUDManager : MonoBehaviour
         switch (model)
         {
             case Weapon.WeaponModel.Pistol:
-                return Instantiate(Resources.Load<GameObject>("Pistol_Ammo")).GetComponent<SpriteRenderer>().sprite;
+                return Resources.Load<GameObject>("Pistol_Ammo").GetComponent<SpriteRenderer>().sprite;
 
             case Weapon.WeaponModel.MP40:
-                return Instantiate(Resources.Load<GameObject>("Rifle_Ammo")).GetComponent<SpriteRenderer>().sprite;
+                return Resources.Load<GameObject>("Rifle_Ammo").GetComponent<SpriteRenderer>().sprite;
 
             default:
                 return null;
@@ -113,9 +153,9 @@ public class HUDManager : MonoBehaviour
 
     private GameObject GetUnActiveWeaponSlot()
     {
-        foreach (GameObject weaponSlot in WeaponManager.Instance.weaponSlots) 
+        foreach (GameObject weaponSlot in WeaponManager.Instance.weaponSlots)
         {
-            if(weaponSlot != WeaponManager.Instance.activeWeaponSlot)
+            if (weaponSlot != WeaponManager.Instance.activeWeaponSlot)
             {
                 return weaponSlot;
             }
@@ -124,5 +164,19 @@ public class HUDManager : MonoBehaviour
         return null;
 
     }
+
+    internal void UpdateThrowables(Throwable.ThrowableType throwable)
+    {
+        switch(throwable)
+        {
+            case Throwable.ThrowableType.Grenade:
+                lethalAmountUI.text = $"{WeaponManager.Instance.grenades}";
+                lethalUI.sprite = Resources.Load<GameObject>("Grenade").GetComponent<SpriteRenderer>().sprite;
+                break;
+
+        }
+    }
 }
+
+
 

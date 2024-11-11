@@ -30,6 +30,9 @@ public class SoundManager : MonoBehaviour
         }
     }
 
+    public AudioSource throwablesChannel;
+    public AudioClip grenadeSound;
+
     public void playShootingSound(WeaponModel weapon)
     {
         switch (weapon)

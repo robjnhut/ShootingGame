@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 
 public class InteractionManager : MonoBehaviour
@@ -8,7 +7,7 @@ public class InteractionManager : MonoBehaviour
 
     public Weapon hoveredWeapon = null;
     public AmmoBox hoveredAmmoBox = null;
-
+    public Throwable hoveredThrowable = null;  // New addition for Throwable objects
 
     private void Awake()
     {
@@ -31,32 +30,30 @@ public class InteractionManager : MonoBehaviour
         {
             GameObject objectHitByRaycast = hit.transform.gameObject;
 
-
-            if (objectHitByRaycast.GetComponent<Weapon>() && objectHitByRaycast.GetComponent<Weapon>().isActiveWeapon == false)
+            // Handle Weapon
+            if (objectHitByRaycast.GetComponent<Weapon>() && !objectHitByRaycast.GetComponent<Weapon>().isActiveWeapon)
             {
-                hoveredWeapon = objectHitByRaycast.gameObject.GetComponent<Weapon>();
-                hoveredWeapon.GetComponent<Outline>().enabled = true;
-
+                if (hoveredWeapon != objectHitByRaycast.GetComponent<Weapon>())
+                {
+                    ResetHoveredObjects();
+                    hoveredWeapon = objectHitByRaycast.GetComponent<Weapon>();
+                    hoveredWeapon.GetComponent<Outline>().enabled = true;
+                }
 
                 if (Input.GetKeyDown(KeyCode.F))
                 {
-                    WeaponManager.Instance.PickUpWeapon(objectHitByRaycast.gameObject); 
+                    WeaponManager.Instance.PickUpWeapon(objectHitByRaycast);
                 }
             }
-            else
+            // Handle AmmoBox
+            else if (objectHitByRaycast.GetComponent<AmmoBox>())
             {
-                if (hoveredWeapon)
+                if (hoveredAmmoBox != objectHitByRaycast.GetComponent<AmmoBox>())
                 {
-                    hoveredWeapon.GetComponent<Outline>().enabled = false; 
+                    ResetHoveredObjects();
+                    hoveredAmmoBox = objectHitByRaycast.GetComponent<AmmoBox>();
+                    hoveredAmmoBox.GetComponent<Outline>().enabled = true;
                 }
-            }
-
-            // Ammo Box
-            if (objectHitByRaycast.GetComponent<AmmoBox>())
-            {
-                hoveredAmmoBox = objectHitByRaycast.gameObject.GetComponent<AmmoBox>();
-                hoveredAmmoBox.GetComponent<Outline>().enabled = true;
-
 
                 if (Input.GetKeyDown(KeyCode.F))
                 {
@@ -64,15 +61,54 @@ public class InteractionManager : MonoBehaviour
                     Destroy(objectHitByRaycast.gameObject);
                 }
             }
-            else
+            // Handle Throwable
+            else if (objectHitByRaycast.GetComponent<Throwable>())
             {
-                if (hoveredWeapon)
+                if (hoveredThrowable != objectHitByRaycast.GetComponent<Throwable>())
                 {
-                    hoveredWeapon.GetComponent<Outline>().enabled = false;
+                    ResetHoveredObjects();
+                    hoveredThrowable = objectHitByRaycast.GetComponent<Throwable>();
+                    hoveredThrowable.GetComponent<Outline>().enabled = true;
+                }
+
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    WeaponManager.Instance.PickUpThrowable(hoveredThrowable);
+                    Destroy(objectHitByRaycast.gameObject);
                 }
             }
-
+            else
+            {
+                // If not hitting any interactive object, reset hovered objects
+                ResetHoveredObjects();
+            }
+        }
+        else
+        {
+            // If no object is hit, reset hovered objects
+            ResetHoveredObjects();
         }
     }
 
+    // Method to reset the hovered objects and disable their outlines
+    private void ResetHoveredObjects()
+    {
+        if (hoveredWeapon)
+        {
+            hoveredWeapon.GetComponent<Outline>().enabled = false;
+            hoveredWeapon = null;
+        }
+
+        if (hoveredAmmoBox)
+        {
+            hoveredAmmoBox.GetComponent<Outline>().enabled = false;
+            hoveredAmmoBox = null;
+        }
+
+        if (hoveredThrowable)
+        {
+            hoveredThrowable.GetComponent<Outline>().enabled = false;
+            hoveredThrowable = null;
+        }
+    }
 }
