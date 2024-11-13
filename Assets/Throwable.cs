@@ -16,7 +16,9 @@ public class Throwable : MonoBehaviour
 
     public enum ThrowableType
     {
-        Grenade
+        None,
+        Grenade,
+        Smoke_Grenade
     }
 
 
@@ -58,6 +60,31 @@ public class Throwable : MonoBehaviour
             case ThrowableType.Grenade:
                 GrenadeEffect();
                 break;
+            case ThrowableType.Smoke_Grenade:
+                SmokeGrenadeEffect();
+                break;
+        }
+    }
+
+    private void SmokeGrenadeEffect()
+    {
+        //visual effect
+        GameObject smokeEffect = GlobalReferences.Instance.smokeGrenadeEffect;
+        Instantiate(smokeEffect, transform.position, transform.rotation);
+
+        //playsound
+        SoundManager.Instance.throwablesChannel.PlayOneShot(SoundManager.Instance.grenadeSound);
+
+
+        Collider[] colliders = Physics.OverlapSphere(transform.position, damageRadius);
+        foreach (Collider objectInRange in colliders)
+        {
+            Rigidbody rb = objectInRange.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                // Apply blindess to enemies
+
+            }
         }
     }
 

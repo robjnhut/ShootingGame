@@ -76,6 +76,13 @@ public class Weapon : MonoBehaviour
 
         if (isActiveWeapon)
         {
+
+            foreach(Transform child in transform)
+            {
+                child.gameObject.layer = LayerMask.NameToLayer("WeaponRender");
+            }
+
+
             GetComponent<Outline>().enabled = false;
 
             // Phát âm thanh hết đạn nếu đạn đã hết và người chơi nhấn chuột để bắn
@@ -118,7 +125,13 @@ public class Weapon : MonoBehaviour
             }
 
         }
-
+        else
+        {
+            foreach (Transform child in transform)
+            {
+                child.gameObject.layer = LayerMask.NameToLayer("Default");
+            }
+        }
     }
 
 

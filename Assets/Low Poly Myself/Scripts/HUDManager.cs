@@ -72,12 +72,18 @@ public class HUDManager : MonoBehaviour
             totalAmmoUI.text = "";
 
             activeWeaponUI.sprite = emptySlot;
+
             unActiveWeaponUI.sprite = emptySlot;
         }
 
-        if(WeaponManager.Instance.grenades <= 0)
+        if(WeaponManager.Instance.lethalsCount <= 0)
         {
             lethalUI.sprite = greySlot;
+
+        }
+        if (WeaponManager.Instance.TacticalCount <= 0)
+        {
+            tacticalUI.sprite = greySlot;
 
         }
 
@@ -165,16 +171,29 @@ public class HUDManager : MonoBehaviour
 
     }
 
-    internal void UpdateThrowables(Throwable.ThrowableType throwable)
+    internal void UpdateThrowablesUI()
     {
-        switch(throwable)
+        lethalAmountUI.text = $"{WeaponManager.Instance.lethalsCount}";
+        tacticalAmountUI.text = $"{WeaponManager.Instance.TacticalCount}";
+
+
+        switch (WeaponManager.Instance.equippedLethalType )
         {
             case Throwable.ThrowableType.Grenade:
-                lethalAmountUI.text = $"{WeaponManager.Instance.grenades}";
                 lethalUI.sprite = Resources.Load<GameObject>("Grenade").GetComponent<SpriteRenderer>().sprite;
                 break;
 
         }
+
+        switch (WeaponManager.Instance.equippedTacticalType)
+        {
+            case Throwable.ThrowableType.Smoke_Grenade:
+                tacticalUI.sprite = Resources.Load<GameObject>("Smoke_Grenade").GetComponent<SpriteRenderer>().sprite;
+                break;
+
+        }
+
+
     }
 }
 

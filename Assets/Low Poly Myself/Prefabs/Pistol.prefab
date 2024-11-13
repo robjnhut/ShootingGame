@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4238529064816267015}
   - component: {fileID: 537414411621561738}
   - component: {fileID: 8477892278051773791}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Bolt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 4997504603221575726}
   - component: {fileID: 644595971277624282}
   - component: {fileID: 8355111069752803496}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: FlashHeadon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4994,7 +4994,7 @@ GameObject:
   - component: {fileID: 316689975166467116}
   - component: {fileID: 8721942281222644561}
   - component: {fileID: 1381220487358141154}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Hammer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5077,7 +5077,7 @@ GameObject:
   - component: {fileID: 1217303920538622526}
   - component: {fileID: 8888410543379357717}
   - component: {fileID: 7709185781624456212}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: MuzzleFlash01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9978,7 +9978,7 @@ GameObject:
   - component: {fileID: 2586022078073195964}
   - component: {fileID: 2620079622770112462}
   - component: {fileID: 5080910326861824836}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Sights
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10061,7 +10061,7 @@ GameObject:
   - component: {fileID: 6008326845932967224}
   - component: {fileID: 6724809860400364113}
   - component: {fileID: 7125286648268860869}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10146,7 +10146,8 @@ GameObject:
   - component: {fileID: 3721984493197407854}
   - component: {fileID: 9104911626430378508}
   - component: {fileID: 7975943086438702596}
-  m_Layer: 6
+  - component: {fileID: 9157328693286857510}
+  m_Layer: 0
   m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10266,6 +10267,33 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!54 &9157328693286857510
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5168065796171665016}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 1
 --- !u!1 &5757054959838590692
 GameObject:
   m_ObjectHideFlags: 0
@@ -10275,7 +10303,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3159246654694391458}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: BulletSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10310,7 +10338,7 @@ GameObject:
   - component: {fileID: 1916430282675386799}
   - component: {fileID: 6816954128688463590}
   - component: {fileID: 6117024648781620528}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: MuzzleFlashEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}

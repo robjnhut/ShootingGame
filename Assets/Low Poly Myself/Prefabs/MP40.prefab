@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3762919077080119227}
   - component: {fileID: 2387026213652479138}
   - component: {fileID: 5661771021905529785}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: MuzzleFlash01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4912,7 +4912,7 @@ GameObject:
   - component: {fileID: 5520834272853947644}
   - component: {fileID: 6145893487412571020}
   - component: {fileID: 2535020554841081422}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4995,7 +4995,7 @@ GameObject:
   - component: {fileID: 6993570797923986774}
   - component: {fileID: 4134669589890573835}
   - component: {fileID: 8767134270833748757}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Mag
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5082,7 +5082,7 @@ GameObject:
   - component: {fileID: 5817728665263285272}
   - component: {fileID: 1182678273865235005}
   - component: {fileID: 616372340245180045}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: MP40
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5264,7 +5264,7 @@ GameObject:
   - component: {fileID: 7970098533648645706}
   - component: {fileID: 3506297448285860653}
   - component: {fileID: 906013051623751335}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: FlashHeadon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10164,7 +10164,7 @@ GameObject:
   - component: {fileID: 5355460713465147429}
   - component: {fileID: 6026021776631640444}
   - component: {fileID: 3870822505758950724}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Bolt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10247,7 +10247,7 @@ GameObject:
   - component: {fileID: 8171439617117843059}
   - component: {fileID: 6167781243845891951}
   - component: {fileID: 3218355883725564175}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Rear_Sight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10328,7 +10328,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4746665842654808748}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: BulletSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10363,7 +10363,7 @@ GameObject:
   - component: {fileID: 4180474489793696864}
   - component: {fileID: 2519134258277442057}
   - component: {fileID: 6053387225683501608}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: MuzzleFlashEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15146,7 +15146,7 @@ GameObject:
   - component: {fileID: 8599943822639264994}
   - component: {fileID: 1049502647373842593}
   - component: {fileID: 6444946406269746740}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Sight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
