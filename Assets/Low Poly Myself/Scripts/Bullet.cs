@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    public int bulletDamage;
+
     private void OnCollisionEnter(Collision objectWeHit)
     {
         if (objectWeHit.gameObject.CompareTag("Target"))
@@ -26,12 +28,12 @@ public class Bullet : MonoBehaviour
 
         }
 
-        if (objectWeHit.gameObject.CompareTag("Bottle"))
+        if (objectWeHit.gameObject.CompareTag("Enemy"))
         {
-            print("hit a bottle");
-
-            objectWeHit.gameObject.GetComponent<Bottle>().Explode();
-            // Không cần phải destroy viên đạn ở đây nếu bạn muốn viên đạn không bị tiêu diệt ngay lập tức.
+           
+            objectWeHit.gameObject.GetComponent<Enemy>().TakeDamage(bulletDamage);
+            
+            Destroy(gameObject);
         }
     }
     

@@ -10208,6 +10208,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isActiveWeapon: 0
+  weaponDamage: 20
   isShooting: 0
   readyToshoot: 0
   shootingDelay: 0.3
