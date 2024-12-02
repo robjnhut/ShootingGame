@@ -19,7 +19,7 @@ public class WeaponManager : MonoBehaviour
     [Header("Throwables General")]
     public float throwForce = 10f;
 
-    
+
 
     public GameObject throwablSpawn;
     public float forceMultiplier = 0;
@@ -85,15 +85,15 @@ public class WeaponManager : MonoBehaviour
         {
             forceMultiplier += Time.deltaTime;
 
-            if(forceMultiplier > forceMultiplierLimit)
+            if (forceMultiplier > forceMultiplierLimit)
             {
                 forceMultiplier = forceMultiplierLimit;
             }
         }
 
-        if (Input.GetKeyUp(KeyCode.G) )
+        if (Input.GetKeyUp(KeyCode.G))
         {
-            if(lethalsCount > 0)
+            if (lethalsCount > 0)
             {
                 ThrowLethal();
             }
@@ -116,7 +116,7 @@ public class WeaponManager : MonoBehaviour
 
     }
 
-    
+
 
     public void PickUpWeapon(GameObject pickedupWeapon)
     {
@@ -245,12 +245,12 @@ public class WeaponManager : MonoBehaviour
                 return 0;
         }
     }
-     
+
     public void PickUpThrowable(Throwable throwable)
     {
         switch (throwable.throwableType)
         {
-            case Throwable.ThrowableType.Grenade:               
+            case Throwable.ThrowableType.Grenade:
                 PickupThrowableAsLethal(Throwable.ThrowableType.Grenade);
                 break;
             case Throwable.ThrowableType.Smoke_Grenade:
@@ -286,11 +286,11 @@ public class WeaponManager : MonoBehaviour
 
     private void PickupThrowableAsLethal(Throwable.ThrowableType lethal)
     {
-        if(equippedLethalType == lethal || equippedLethalType == Throwable.ThrowableType.None)
+        if (equippedLethalType == lethal || equippedLethalType == Throwable.ThrowableType.None)
         {
             equippedLethalType = lethal;
 
-            if(lethalsCount < maxLethals)
+            if (lethalsCount < maxLethals)
             {
                 lethalsCount += 1;
                 Destroy(InteractionManager.Instance.hoveredThrowable.gameObject);
@@ -340,7 +340,7 @@ public class WeaponManager : MonoBehaviour
         // Giảm số lượng lựu đạn và cập nhật HUD
         lethalsCount -= 1;
 
-        if(lethalsCount <= 0)
+        if (lethalsCount <= 0)
         {
             equippedLethalType = Throwable.ThrowableType.None;
         }
@@ -415,7 +415,7 @@ public class WeaponManager : MonoBehaviour
 
     private GameObject GetThrowablePrefabs(Throwable.ThrowableType throwableType)
     {
-        switch(throwableType)
+        switch (throwableType)
         {
             case Throwable.ThrowableType.Grenade:
                 return grenadePrefab;

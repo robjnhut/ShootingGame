@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Animations;
 
 public class ZombieAttackState : StateMachineBehaviour
 {
@@ -20,6 +22,13 @@ public class ZombieAttackState : StateMachineBehaviour
 
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (SoundManager.Instance.zombieChannel.isPlaying == false)
+        {
+            SoundManager.Instance.zombieChannel.PlayOneShot(SoundManager.Instance.zombieAttack) ;
+            
+        }
+
+
         LookAtPlayer();
         
         // --- Checking if the agent should stop Chasing --- //
@@ -31,13 +40,6 @@ public class ZombieAttackState : StateMachineBehaviour
         }
     }
 
-    
-
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-
-    }
-
     private void LookAtPlayer()
     {
         Vector3 direction = player.position - agent.transform.position;
@@ -45,5 +47,11 @@ public class ZombieAttackState : StateMachineBehaviour
 
         var yRotation = agent.transform.eulerAngles.y;
         agent.transform.rotation = Quaternion.Euler(0, yRotation,0);
+    } 
+
+    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        SoundManager.Instance.zombieChannel.Stop();
     }
+
 }
