@@ -68,19 +68,18 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(1f);
         gameOverUI.gameObject.SetActive(true);
 
-        int waveSurvived = GlobalReferences.Instance.waveNumber - 1; // Decrease 1 because waveNumber is incremented at the start of the wave
-        int currentHighScore = SaveLoadManager.Instance.LoadHighScore();
+        int waveSurvived = GlobalReferences.Instance.waveNumber ; // Decrease 1 because waveNumber is incremented at the start of the wave
+        //int currentHighScore = SaveLoadManager.Instance.LoadHighScore();
 
-        if (waveSurvived > currentHighScore)
+        if (waveSurvived - 1> SaveLoadManager.Instance.LoadHighScore())
         {
-            SaveLoadManager.Instance.SaveHighScore(waveSurvived);
+            SaveLoadManager.Instance.SaveHighScore(waveSurvived -1);
         }
 
         // Optionally, you could update the high score UI in the game over screen here
 
         StartCoroutine(ReturnToMainMenu());
     }
-
 
 
     private IEnumerator ReturnToMainMenu()

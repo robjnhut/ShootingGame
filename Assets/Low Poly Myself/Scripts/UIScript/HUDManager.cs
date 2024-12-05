@@ -89,40 +89,7 @@ public class HUDManager : MonoBehaviour
 
     }
 
-    public void UpdateHUD()
-    {
-        // Get the active weapon from WeaponManager
-        Weapon activeWeapon = WeaponManager.Instance.activeWeaponSlot?.GetComponent<Weapon>();
-
-        if (activeWeapon != null)
-        {
-            // Display remaining bullets in magazine
-            magazineAmmoUI.text = $"{activeWeapon.bulletsLeft}";
-
-            // Display total remaining ammo for this weapon type
-            totalAmmoUI.text = $"{WeaponManager.Instance.CheckAmmoLeftFor(activeWeapon.thisWeaponModel)}";
-
-            // Set ammo icon and weapon icon
-            ammoTypeUI.sprite = GetAmmoSprite(activeWeapon.thisWeaponModel);
-            activeWeaponUI.sprite = GetWeaponSprite(activeWeapon.thisWeaponModel);
-
-            Debug.Log("Updated HUD for active weapon: " + activeWeapon.thisWeaponModel);
-        }
-        else
-        {
-            // Clear UI elements when no active weapon is selected
-            magazineAmmoUI.text = "0";
-            totalAmmoUI.text = "0";
-            ammoTypeUI.sprite = emptySlot;
-            activeWeaponUI.sprite = emptySlot;
-
-            Debug.LogWarning("No active weapon found, HUD cleared.");
-        }
-    }
-
-
-
-
+    
 
     private Sprite GetWeaponSprite(Weapon.WeaponModel model)
     {
@@ -154,9 +121,6 @@ public class HUDManager : MonoBehaviour
         }
     }
 
-
-
-
     private GameObject GetUnActiveWeaponSlot()
     {
         foreach (GameObject weaponSlot in WeaponManager.Instance.weaponSlots)
@@ -170,6 +134,38 @@ public class HUDManager : MonoBehaviour
         return null;
 
     }
+
+    public void UpdateHUD()
+    {
+        // Lấy vũ khí hiện tại từ WeaponManager
+        Weapon activeWeapon = WeaponManager.Instance.activeWeaponSlot?.GetComponent<Weapon>();
+
+        if (activeWeapon != null)
+        {
+            // Cập nhật đạn trong băng (magazine)
+            magazineAmmoUI.text = $"{activeWeapon.bulletsLeft}";
+
+            // Cập nhật tổng số đạn còn lại cho vũ khí này
+            totalAmmoUI.text = $"{WeaponManager.Instance.CheckAmmoLeftFor(activeWeapon.thisWeaponModel)}";
+
+            // Cập nhật hình ảnh loại đạn và vũ khí
+            ammoTypeUI.sprite = GetAmmoSprite(activeWeapon.thisWeaponModel);
+            activeWeaponUI.sprite = GetWeaponSprite(activeWeapon.thisWeaponModel);
+
+            Debug.Log("Updated HUD for active weapon: " + activeWeapon.thisWeaponModel);
+        }
+        else
+        {
+            // Nếu không có vũ khí active, xóa tất cả UI
+            magazineAmmoUI.text = "0";
+            totalAmmoUI.text = "0";
+            ammoTypeUI.sprite = emptySlot;
+            activeWeaponUI.sprite = emptySlot;
+
+            Debug.LogWarning("No active weapon found, HUD cleared.");
+        }
+    }
+
 
     internal void UpdateThrowablesUI()
     {

@@ -51,7 +51,21 @@ public class WeaponManager : MonoBehaviour
 
     private void Start()
     {
-        activeWeaponSlot = weaponSlots[0];
+        //activeWeaponSlot = weaponSlots[0];
+
+        //equippedLethalType = Throwable.ThrowableType.None;
+        //equippedTacticalType = Throwable.ThrowableType.None;
+
+        // Kiểm tra xem weaponSlots có phần tử nào không
+        if (weaponSlots != null && weaponSlots.Count > 0)
+        {
+            activeWeaponSlot = weaponSlots[0];
+            Debug.Log("Active weapon slot initialized with: " + activeWeaponSlot.name);
+        }
+        else
+        {
+            Debug.LogError("Weapon slots are not initialized or empty.");
+        }
 
         equippedLethalType = Throwable.ThrowableType.None;
         equippedTacticalType = Throwable.ThrowableType.None;
@@ -122,26 +136,30 @@ public class WeaponManager : MonoBehaviour
     {
 
         AddWeaponIntoActiveSlot(pickedupWeapon);
-        HUDManager.Instance.UpdateHUD(); // Cập nhật HUD sau khi nhặt vũ khí
+        HUDManager.Instance.UpdateHUD();
+
     }
 
     private void AddWeaponIntoActiveSlot(GameObject pickedupWeapon)
     {
         DropCurrentWeapon(pickedupWeapon);
 
-        // Gán súng vào vị trí activeWeaponSlot
+        // Kiểm tra và gán súng vào activeWeaponSlot
         pickedupWeapon.transform.SetParent(activeWeaponSlot.transform, false);
 
         // Lấy component Weapon để truy cập spawnPosition và spawnRotation
         Weapon weapon = pickedupWeapon.GetComponent<Weapon>();
 
         // Đặt position và rotation đúng mong muốn
-        pickedupWeapon.transform.localPosition = new Vector3(weapon.spawnPosition.x, weapon.spawnPosition.y, weapon.spawnPosition.z);
-        pickedupWeapon.transform.localRotation = Quaternion.Euler(weapon.spawnRotation.x, weapon.spawnRotation.y, weapon.spawnRotation.z);
+        pickedupWeapon.transform.localPosition = weapon.spawnPosition;
+        pickedupWeapon.transform.localRotation = Quaternion.Euler(weapon.spawnRotation);
 
-        // Đảm bảo weapon hoạt động
+        // Đảm bảo vũ khí hoạt động
         weapon.isActiveWeapon = true;
         weapon.animator.enabled = true;
+
+        // Kiểm tra lại xem vũ khí có được gán đúng không
+        Debug.Log("Weapon " + weapon.thisWeaponModel + " assigned to active slot.");
     }
 
     //private void AddWeaponIntoActiveSlot(GameObject pickedupWeapon)
@@ -198,7 +216,7 @@ public class WeaponManager : MonoBehaviour
             Weapon newWeapon = activeWeaponSlot.transform.GetChild(0).GetComponent<Weapon>();
             newWeapon.isActiveWeapon = true;
         }
-
+        HUDManager.Instance.UpdateHUD();
 
     }
 

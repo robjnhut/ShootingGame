@@ -149,7 +149,7 @@ public class Weapon : MonoBehaviour
 
         muzzleEffect.GetComponent<ParticleSystem>().Play();
         animator.SetTrigger("RECOIL");
-        HUDManager.Instance.UpdateHUD();
+       // HUDManager.Instance.UpdateHUD();
 
 
 
@@ -220,7 +220,7 @@ public class Weapon : MonoBehaviour
         }
 
         isReloading = false;
-        HUDManager.Instance.UpdateHUD();
+     
 
     }
 

@@ -40,16 +40,6 @@ public class MouseMovementScript : MonoBehaviour
 
         transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0f);
 
-        //// Rotation around the x axis (look up and down)
-        //xRotation -= mouseY;
-
-        //// Clamp the rotation
-        //xRotation = Mathf.Clamp(xRotation, topClam, bottomClam);
-
-        //// Rotation around the y axis (look left and right)
-        //yRotation += mouseX;
-
-        //// Apply rotations to our transform
-        //transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0f);
+        
     }
 }

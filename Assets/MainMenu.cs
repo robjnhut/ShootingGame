@@ -28,8 +28,8 @@ public class MainMenu : MonoBehaviour
         UnityEditor.EditorApplication.isPlaying = false;
 
 #else
+      
     
-
 #endif
     }
 }

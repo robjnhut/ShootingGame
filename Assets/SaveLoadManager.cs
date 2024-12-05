@@ -7,7 +7,7 @@ public class SaveLoadManager : MonoBehaviour
 {
     public static SaveLoadManager Instance { get; set; }
 
-    string highScoreKey = "BestWaveSavedValued"; 
+    public string highScoreKey = "BestWaveSavedValued"; 
     
     private void Awake()
     {
