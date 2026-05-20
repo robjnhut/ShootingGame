@@ -1,4 +1,4 @@
-# 🎯 Shooting Game (Tên game của bạn nếu có)
+# 🎯 Shooting Game 
 
 > A 2D/3D Shooting Game built from scratch. This is a self-taught project to improve my programming skills and understand game development mechanics.
 
